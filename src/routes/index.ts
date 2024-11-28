@@ -1,8 +1,9 @@
 import { Router } from "express";
-import * as usersController from "../controllers/users.controller";
-const usersRouter = Router();
+import { login, signup } from "../controllers/users.controller"; // Ajuste o caminho conforme sua estrutura
 
-usersRouter.use("/login", usersController.login);
-usersRouter.use("/signup", usersController.signup);
+const authRouter = Router();
 
-export default usersRouter;
+authRouter.post("/login", login);
+authRouter.post("/signup", signup);
+
+export default authRouter;
