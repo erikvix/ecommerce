@@ -4,9 +4,9 @@ import db from "../database/database.config";
 import { User } from "../models/users";
 
 interface UserPayload {
-  nome?: string;
+  name?: string;
   email: string;
-  senha: string;
+  password: string;
 }
 
 const SALT_ROUNDS = 10;
@@ -17,7 +17,7 @@ const validatePayload = (payload: UserPayload, requiredFields: string[]) => {
       return false;
     }
   }
-  if (typeof payload.senha !== "string") {
+  if (typeof payload.password !== "string") {
     return false;
   }
   return true;
@@ -26,7 +26,7 @@ const validatePayload = (payload: UserPayload, requiredFields: string[]) => {
 export const login = async (req: Request, res: Response): Promise<void> => {
   const payload: UserPayload = req.body;
 
-  if (!validatePayload(payload, ["email", "senha"])) {
+  if (!validatePayload(payload, ["email", "password"])) {
     res.status(400).json({ status: 400, message: "Missing data" });
     return;
   }
@@ -41,10 +41,10 @@ export const login = async (req: Request, res: Response): Promise<void> => {
         return;
       }
 
-      if (!user || !(await bcrypt.compare(payload.senha, user.senha))) {
+      if (!user || !(await bcrypt.compare(payload.password, user.password))) {
         res
           .status(401)
-          .json({ status: 401, message: "E-mail ou senha invalidos" });
+          .json({ status: 401, message: "E-mail ou password invalidos" });
         return;
       }
 
@@ -56,7 +56,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
 export const signup = async (req: Request, res: Response): Promise<void> => {
   const payload: UserPayload = req.body;
 
-  if (!validatePayload(payload, ["nome", "email", "senha"])) {
+  if (!validatePayload(payload, ["name", "email", "password"])) {
     res.status(400).json({ status: 400, message: "Missing data" });
     return;
   }
@@ -76,11 +76,11 @@ export const signup = async (req: Request, res: Response): Promise<void> => {
         return;
       }
 
-      const hashedPassword = await bcrypt.hash(payload.senha, SALT_ROUNDS);
+      const hashedPassword = await bcrypt.hash(payload.password, SALT_ROUNDS);
 
       db.run(
-        "INSERT INTO users (email, nome, senha) VALUES (?, ?, ?)",
-        [payload.email, payload.nome, hashedPassword],
+        "INSERT INTO users (email, name, password) VALUES (?, ?, ?)",
+        [payload.email, payload.name, hashedPassword],
         (err) => {
           if (err) {
             console.error(err.message);
