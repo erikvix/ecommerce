@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import db from "../database/database.config";
 import { User } from "../models/users";
 
@@ -9,7 +9,7 @@ interface UserPayload {
   password: string;
 }
 
-const SALT_ROUNDS = 10;
+const salt = bcrypt.genSaltSync(10);
 
 const validatePayload = (payload: UserPayload, requiredFields: string[]) => {
   for (const field of requiredFields) {
@@ -27,7 +27,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
   const payload: UserPayload = req.body;
 
   if (!validatePayload(payload, ["email", "password"])) {
-    res.status(400).json({ status: 400, message: "Missing data" });
+    res.status(400).json({ status: 400, message: "faltando dados" });
     return;
   }
 
@@ -40,8 +40,9 @@ export const login = async (req: Request, res: Response): Promise<void> => {
         res.status(500).json({ status: 500, message: "Server error" });
         return;
       }
+      console.log(user);
 
-      if (!user || !(await bcrypt.compare(payload.password, user.password))) {
+      if (!user || !bcrypt.compareSync(payload.password, user.password)) {
         res
           .status(401)
           .json({ status: 401, message: "E-mail ou password invalidos" });
@@ -75,8 +76,7 @@ export const signup = async (req: Request, res: Response): Promise<void> => {
         res.status(400).json({ status: 400, message: "Email already exists" });
         return;
       }
-
-      const hashedPassword = await bcrypt.hash(payload.password, SALT_ROUNDS);
+      const hashedPassword = bcrypt.hashSync(payload.password, salt);
 
       db.run(
         "INSERT INTO users (email, name, password) VALUES (?, ?, ?)",

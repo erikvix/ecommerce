@@ -1,0 +1,10 @@
+{
+    "type": "node",
+    "request": "launch",
+    "name": "Debug com JavaScript",
+    "program": "${workspaceFolder}/dist/index.js",
+    "skipFiles": ["<node_internals>/**"],
+    "preLaunchTask": "tsc: build - tsconfig.json",
+    "outFiles": ["${workspaceFolder}/dist/**/*.js"]
+  }
+  

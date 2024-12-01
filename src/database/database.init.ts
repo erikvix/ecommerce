@@ -2,12 +2,13 @@ import db from "./database.config";
 
 const initializeDatabase = () => {
   const createTableSQL = `
+  
 
-  CREATE TABLE IF NOT EXISTS images (
+  CREATE TABLE IF NOT EXISTS users ( 
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    productId INTEGER NOT NULL,
-    path TEXT NOT NULL,
-    FOREIGN KEY (productId) REFERENCES products (id)
+    name INTEGER NOT NULL,
+    email TEXT NOT NULL,
+    password TEXT NOT NULL
 );
   CREATE TABLE IF NOT EXISTS products (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
