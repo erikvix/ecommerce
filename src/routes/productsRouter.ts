@@ -12,7 +12,7 @@ import {
 const productsRouter = Router();
 
 productsRouter.get("/", getAll);
-productsRouter.get("/:id", getProductsByCategory);
+productsRouter.get("/category/:id", getProductsByCategory);
 productsRouter.post("/", createProduct);
 productsRouter.put("/:id", updateProduct);
 productsRouter.delete("/:id", deleteProduct);

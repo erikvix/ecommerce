@@ -2,7 +2,6 @@ import db from "./database.config";
 
 const initializeDatabase = () => {
   const createTableSQL = `
-  
 
   CREATE TABLE IF NOT EXISTS users ( 
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -36,9 +35,7 @@ CREATE TABLE IF NOT EXISTS orders (
     if (err) {
       console.error("Error creating table:", err.message);
     } else {
-      console.log(
-        "Database initialized: 'itens' table created if it did not exist."
-      );
+      console.log("Database initialized: all table created.");
     }
   });
 };
