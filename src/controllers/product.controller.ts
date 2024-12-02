@@ -344,7 +344,7 @@ export const getHistory = async (
     return;
   }
   db.run(
-    "SELECT * FROM products WHERE id = ?",
+    "SELECT * FROM orders WHERE userId = ?",
     [payload.id],
     async (err: Error, order: Order | null) => {
       if (err) {

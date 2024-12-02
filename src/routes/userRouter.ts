@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { login, signup } from "../controllers/users.controller"; // Ajuste o caminho conforme sua estrutura
+import { login, signup } from "../controllers/users.controller";
 
 const usersRouter = Router();
 

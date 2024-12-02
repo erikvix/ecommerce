@@ -48,8 +48,12 @@ export const login = async (req: Request, res: Response): Promise<void> => {
           .json({ status: 401, message: "E-mail ou password invalidos" });
         return;
       }
-      const token = jwt.sign({ id: user.id }, process.env.ACCESS_TOKEN);
-      res.status(200).json({ status: 200, message: "Login successful", token });
+      const token = jwt.sign(
+        { id: user.id, name: user.name, email: user.email },
+        process.env.ACCESS_TOKEN as string,
+        { expiresIn: "1h" }
+      );
+      res.status(200).json({ token });
     }
   );
 };
