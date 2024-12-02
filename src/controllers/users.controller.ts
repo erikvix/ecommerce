@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import bcrypt from "bcryptjs";
 import db from "../database/database.config";
 import { User } from "../models/users";
+import jwt from "jsonwebtoken";
 
 interface UserPayload {
   name?: string;
@@ -40,7 +41,6 @@ export const login = async (req: Request, res: Response): Promise<void> => {
         res.status(500).json({ status: 500, message: "Server error" });
         return;
       }
-      console.log(user);
 
       if (!user || !bcrypt.compareSync(payload.password, user.password)) {
         res
@@ -48,8 +48,8 @@ export const login = async (req: Request, res: Response): Promise<void> => {
           .json({ status: 401, message: "E-mail ou password invalidos" });
         return;
       }
-
-      res.status(200).json({ status: 200, message: "Login successful" });
+      const token = jwt.sign({ id: user.id }, process.env.ACCESS_TOKEN);
+      res.status(200).json({ status: 200, message: "Login successful", token });
     }
   );
 };

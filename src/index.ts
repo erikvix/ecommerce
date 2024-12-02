@@ -4,9 +4,11 @@ import usersRouter from "./routes/userRouter";
 import initializeDatabase from "./database/database.init";
 import productsRouter from "./routes/productsRouter";
 import path from "path";
+import { configDotenv } from "dotenv";
 
 const app = express();
 const port = 8080;
+configDotenv();
 
 initializeDatabase();
 
